@@ -1,0 +1,32 @@
+info:
+  name: Create Application
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: http://localhost:8080/api/applications
+  body:
+    type: json
+    data: |-
+      {
+        "link": "https://www.digitalextremes.com/careers/position/5169126007",
+        "company": "Digital Extremes",
+        "transitTime": "unknown",
+        "location": "London, ON",
+        "salary": "80k-95k / year",
+        "jobType": "Dont Know",
+        "applicationDeadline": null,
+        "dateApplied": "2026-09-17",
+        "applicationStatus": "APPLIED",
+        "postingPlatform": "Company's Site",
+        "notes": "Okay realistically this would call for a relocation lmao so idk but I submitted cuz why not. It's gonna probably be a rejection anyways"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
