@@ -6,7 +6,6 @@ import com.example.jobtracker.dto.PatchJobApplicationRequest;
 import com.example.jobtracker.model.JobApplication;
 import com.example.jobtracker.repository.JobApplicationRepository;
 import com.example.jobtracker.repository.UserApplicationRepository;
-import com.example.jobtracker.repository.UserApplicationRepository;
 import com.example.jobtracker.exception.ApplicationHasApplicantsException;
 
 import org.springframework.stereotype.Service;
