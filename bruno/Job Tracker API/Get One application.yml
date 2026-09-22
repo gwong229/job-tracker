@@ -6,7 +6,9 @@ info:
 http:
   method: GET
   url: http://localhost:8080/api/applications/1
-  auth: inherit
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJnZW9mZnJleUBleGFtcGxlLmNvbSIsImlhdCI6MTc5MDA2MTYwNSwiZXhwIjoxNzkwMTQ4MDA1fQ.7KMVwQk04nkowmFJiFSzgZnIIoEtj2uopOy7E-E41VFTqGks8TApQarc_cEa7A-XKZwhntoKrNqq2js4M4Zciw
 
 settings:
   encodeUrl: true

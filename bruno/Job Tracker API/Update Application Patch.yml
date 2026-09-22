@@ -5,14 +5,16 @@ info:
 
 http:
   method: PATCH
-  url: http://localhost:8080/api/applications/2
+  url: http://localhost:8080/api/applications/1
   body:
     type: json
     data: |-
       {
-        "jobType": "Dont Know"
+        "jobType": "Dont Knowwer"
       }
-  auth: inherit
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJnZW9mZnJleUBleGFtcGxlLmNvbSIsImlhdCI6MTc5MDA0MzAxNCwiZXhwIjoxNzkwMTI5NDE0fQ.OpydVyOyzYOQ2YWnvnW6dAxYmoDLmnwZtLwU3T7l1Rr5GiZBfbnOWepQrmoYlJiEKkdi-rWcirugM10Jij7fPg
 
 settings:
   encodeUrl: true

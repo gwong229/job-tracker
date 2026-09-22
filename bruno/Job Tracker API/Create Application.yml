@@ -12,17 +12,15 @@ http:
       {
         "link": "https://www.digitalextremes.com/careers/position/5169126007",
         "company": "Digital Extremes",
-        "transitTime": "unknown",
         "location": "London, ON",
         "salary": "80k-95k / year",
         "jobType": "Dont Know",
         "applicationDeadline": null,
-        "dateApplied": "2026-09-17",
-        "applicationStatus": "APPLIED",
-        "postingPlatform": "Company's Site",
-        "notes": "Okay realistically this would call for a relocation lmao so idk but I submitted cuz why not. It's gonna probably be a rejection anyways"
+        "postingPlatform": "Company's Site"
       }
-  auth: inherit
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJnZW9mZnJleUBleGFtcGxlLmNvbSIsImlhdCI6MTc5MDA0MzAxNCwiZXhwIjoxNzkwMTI5NDE0fQ.OpydVyOyzYOQ2YWnvnW6dAxYmoDLmnwZtLwU3T7l1Rr5GiZBfbnOWepQrmoYlJiEKkdi-rWcirugM10Jij7fPg
 
 settings:
   encodeUrl: true

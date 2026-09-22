@@ -1,0 +1,18 @@
+info:
+  name: myapps
+  type: http
+  seq: 10
+
+http:
+  method: GET
+  url: http://localhost:8080/api/my-applications
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJnZW9mZnJleUBleGFtcGxlLmNvbSIsImlhdCI6MTc5MDA0Mzg4OCwiZXhwIjoxNzkwMTMwMjg4fQ.OvtPo1v7wEWfr9o6iQx8yhyP-nHsvvY-CsXhA8ClBfVwUq_KvC8M5aUd5GKulPAelZS7TEbWicyQ3LqfUnltmQ
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

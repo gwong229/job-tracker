@@ -1,15 +1,21 @@
 package com.example.jobtracker.service;
 
+import com.example.jobtracker.dto.CreateJobApplicationRequest;
+import com.example.jobtracker.dto.JobApplicationResponse;
+import com.example.jobtracker.dto.PatchJobApplicationRequest;
+import com.example.jobtracker.exception.ApplicationHasApplicantsException;
 import com.example.jobtracker.model.JobApplication;
 import com.example.jobtracker.repository.JobApplicationRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import com.example.jobtracker.repository.UserApplicationRepository;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -17,6 +23,8 @@ class JobApplicationServiceTest {
 
     @Mock
     private JobApplicationRepository repository;
+    @Mock
+    private UserApplicationRepository userApplicationRepository; 
 
     @Test
     void getApplicationById_returnsApplication_whenIdExists() {
@@ -25,34 +33,35 @@ class JobApplicationServiceTest {
 
         when(repository.findById(1L)).thenReturn(Optional.of(application));
 
-        JobApplicationService service = new JobApplicationService(repository);
-        Optional<JobApplication> result = service.getApplicationById(1L);
+        JobApplicationService service = new JobApplicationService(repository, userApplicationRepository);
+        Optional<JobApplicationResponse> result = service.getApplicationById(1L);
 
         assertTrue(result.isPresent());
-        assertEquals("Shopify", result.get().getCompany());
+        assertEquals("Shopify", result.get().company());
     }
 
     @Test
     void getApplicationById_returnsEmpty_whenIdDoesNotExist() {
         when(repository.findById(99L)).thenReturn(Optional.empty());
 
-        JobApplicationService service = new JobApplicationService(repository);
-        Optional<JobApplication> result = service.getApplicationById(99L);
+        JobApplicationService service = new JobApplicationService(repository, userApplicationRepository);
+        Optional<JobApplicationResponse> result = service.getApplicationById(99L);
 
         assertTrue(result.isEmpty());
     }
+
     @Test
     void createApplication_savesAndReturnsApplication() {
-        JobApplication application = new JobApplication();
-        application.setCompany("Wealthsimple");
+        CreateJobApplicationRequest request = new CreateJobApplicationRequest(
+                null, "Wealthsimple", null, null, null, null, null);
 
-        when(repository.save(application)).thenReturn(application);
+        when(repository.save(any(JobApplication.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        JobApplicationService service = new JobApplicationService(repository);
-        JobApplication result = service.createApplication(application);
+        JobApplicationService service = new JobApplicationService(repository, userApplicationRepository);
+        JobApplicationResponse result = service.createApplication(request);
 
-        assertEquals("Wealthsimple", result.getCompany());
-        verify(repository).save(application);
+        assertEquals("Wealthsimple", result.company());
+        verify(repository).save(any(JobApplication.class));
     }
 
     @Test
@@ -60,25 +69,28 @@ class JobApplicationServiceTest {
         JobApplication existing = new JobApplication();
         existing.setCompany("OldCompany");
 
-        JobApplication updated = new JobApplication();
-        updated.setCompany("NewCompany");
+        CreateJobApplicationRequest request = new CreateJobApplicationRequest(
+                null, "NewCompany", null, null, null, null, null);
 
         when(repository.findById(1L)).thenReturn(Optional.of(existing));
         when(repository.save(existing)).thenReturn(existing);
 
-        JobApplicationService service = new JobApplicationService(repository);
-        Optional<JobApplication> result = service.updateApplication(1L, updated);
+        JobApplicationService service = new JobApplicationService(repository, userApplicationRepository);
+        Optional<JobApplicationResponse> result = service.updateApplication(1L, request);
 
         assertTrue(result.isPresent());
-        assertEquals("NewCompany", result.get().getCompany());
+        assertEquals("NewCompany", result.get().company());
     }
 
     @Test
     void updateApplication_returnsEmpty_whenIdDoesNotExist() {
+        CreateJobApplicationRequest request = new CreateJobApplicationRequest(
+                null, "Anything", null, null, null, null, null);
+
         when(repository.findById(99L)).thenReturn(Optional.empty());
 
-        JobApplicationService service = new JobApplicationService(repository);
-        Optional<JobApplication> result = service.updateApplication(99L, new JobApplication());
+        JobApplicationService service = new JobApplicationService(repository, userApplicationRepository);
+        Optional<JobApplicationResponse> result = service.updateApplication(99L, request);
 
         assertTrue(result.isEmpty());
     }
@@ -89,25 +101,26 @@ class JobApplicationServiceTest {
         existing.setCompany("Shopify");
         existing.setJobType("Full-time");
 
-        JobApplication patch = new JobApplication();
-        patch.setJobType("Contract"); // only jobType provided, company left null
+        PatchJobApplicationRequest patch = new PatchJobApplicationRequest(
+                null, null, null, null, "Contract", null, null); // only jobType provided
 
         when(repository.findById(1L)).thenReturn(Optional.of(existing));
         when(repository.save(existing)).thenReturn(existing);
 
-        JobApplicationService service = new JobApplicationService(repository);
-        Optional<JobApplication> result = service.patchApplication(1L, patch);
+        JobApplicationService service = new JobApplicationService(repository, userApplicationRepository);
+        Optional<JobApplicationResponse> result = service.patchApplication(1L, patch);
 
         assertTrue(result.isPresent());
-        assertEquals("Contract", result.get().getJobType());
-        assertEquals("Shopify", result.get().getCompany()); // unchanged
+        assertEquals("Contract", result.get().jobType());
+        assertEquals("Shopify", result.get().company()); // unchanged
     }
 
     @Test
     void deleteApplication_returnsTrue_whenIdExists() {
         when(repository.existsById(1L)).thenReturn(true);
+        when(userApplicationRepository.existsByApplicationId(1L)).thenReturn(false);
 
-        JobApplicationService service = new JobApplicationService(repository);
+        JobApplicationService service = new JobApplicationService(repository, userApplicationRepository);
         boolean result = service.deleteApplication(1L);
 
         assertTrue(result);
@@ -118,10 +131,22 @@ class JobApplicationServiceTest {
     void deleteApplication_returnsFalse_whenIdDoesNotExist() {
         when(repository.existsById(99L)).thenReturn(false);
 
-        JobApplicationService service = new JobApplicationService(repository);
+        JobApplicationService service = new JobApplicationService(repository, userApplicationRepository);
         boolean result = service.deleteApplication(99L);
 
         assertFalse(result);
         verify(repository, never()).deleteById(any());
     }
+
+    @Test
+    void deleteApplication_throwsException_whenApplicantsExist() {
+        when(repository.existsById(1L)).thenReturn(true);
+        when(userApplicationRepository.existsByApplicationId(1L)).thenReturn(true);
+
+        JobApplicationService service = new JobApplicationService(repository, userApplicationRepository);
+
+        assertThrows(ApplicationHasApplicantsException.class, () -> service.deleteApplication(1L));
+        verify(repository, never()).deleteById(any());
+    }
+    
 }

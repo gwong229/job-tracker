@@ -1,4 +1,7 @@
+spring.application.name=job-tracker
 spring.datasource.url=jdbc:postgresql://localhost:5432/job_tracker
 spring.datasource.username=postgres
 spring.datasource.password=YOUR_PASSWORD_HERE
 spring.jpa.hibernate.ddl-auto=update
+jwt.secret=PASTE_YOUR_RANDOM_SECRET_HERE
+jwt.expiration-ms=86400000
