@@ -12,29 +12,25 @@ public class JobApplication {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long applicationId;
 
     private String link;
     @NotBlank
     private String company;
-    private String transitTime;
     private String location;
     private String salary;
     private String jobType;
     private LocalDate applicationDeadline;
-    private LocalDate dateApplied;
-    private String applicationStatus;
     private String postingPlatform;
-    private String notes;
 
     public JobApplication() {
     }
 
     public Long getId() {
-        return id;
+        return applicationId;
     }
     public void setId(Long id) {
-        this.id = id;
+        this.applicationId = id;
     }
     public String getLink() {
         return link;
@@ -47,12 +43,6 @@ public class JobApplication {
     }
     public void setCompany(String company) {
         this.company = company;
-    }
-    public String getTransitTime() {
-        return transitTime;
-    }
-    public void setTransitTime(String transitTime) {
-        this.transitTime = transitTime;
     }
     public String getLocation() {
         return location;
@@ -78,28 +68,10 @@ public class JobApplication {
     public void setApplicationDeadline(LocalDate applicationDeadline) {
         this.applicationDeadline = applicationDeadline;
     }
-    public LocalDate getDateApplied() {
-        return dateApplied;
-    }
-    public void setDateApplied(LocalDate dateApplied) {
-        this.dateApplied = dateApplied;
-    }
-    public String getApplicationStatus() {
-        return applicationStatus;
-    }
-    public void setApplicationStatus(String applicationStatus) {
-        this.applicationStatus = applicationStatus;
-    }
     public String getPostingPlatform() {
         return postingPlatform;
     }
     public void setPostingPlatform(String postingPlatform) {
         this.postingPlatform = postingPlatform;
-    }
-    public String getNotes() {
-        return notes;
-    }
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 }

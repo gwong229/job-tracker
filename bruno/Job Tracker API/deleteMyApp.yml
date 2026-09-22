@@ -1,0 +1,18 @@
+info:
+  name: deleteMyApp
+  type: http
+  seq: 12
+
+http:
+  method: DELETE
+  url: http://localhost:8080/api/my-applications/2
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJnZW9mZnJleUBleGFtcGxlLmNvbSIsImlhdCI6MTc5MDA2MjAxNCwiZXhwIjoxNzkwMTQ4NDE0fQ.Ocd2tvudsxIMx4tMo5gaOVDhFoSwjoQd6bZsL4rQf8GB9RaGoeODlMFPLoRbkem5dpcnW0ivibifKtG6CoBGag
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

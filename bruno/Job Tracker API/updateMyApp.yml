@@ -1,0 +1,21 @@
+info:
+  name: updateMyApp
+  type: http
+  seq: 11
+
+http:
+  method: PATCH
+  url: http://localhost:8080/api/my-applications/2
+  body:
+    type: json
+    data: '{ "applicationStatus": "Interviewing" }'
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiZW1haWwiOiJhbGljZUBleGFtcGxlLmNvbSIsImlhdCI6MTc5MDA0NDA0NCwiZXhwIjoxNzkwMTMwNDQ0fQ.-6yQSwBYv_BzN4Nc9BwYr2ZOIFCo8bCRwC8ZQIaxZOYLm6XilevXl-cd2H1X5psqLvG4mjoPcssjNzlKoWj_Yg
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
