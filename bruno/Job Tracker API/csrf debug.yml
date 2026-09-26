@@ -1,11 +1,11 @@
 info:
-  name: myapps
+  name: csrf debug
   type: http
-  seq: 10
+  seq: 1
 
 http:
   method: GET
-  url: http://localhost:8080/api/my-applications
+  url: http://localhost:8080/api/csrf
   auth: inherit
 
 settings:
