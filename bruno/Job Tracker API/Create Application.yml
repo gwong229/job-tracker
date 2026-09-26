@@ -20,11 +20,10 @@ http:
       }
   auth:
     type: bearer
-    token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJnZW9mZnJleUBleGFtcGxlLmNvbSIsImlhdCI6MTc5MDA0MzAxNCwiZXhwIjoxNzkwMTI5NDE0fQ.OpydVyOyzYOQ2YWnvnW6dAxYmoDLmnwZtLwU3T7l1Rr5GiZBfbnOWepQrmoYlJiEKkdi-rWcirugM10Jij7fPg
+    token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJnZW9mZnJleUBleGFtcGxlLmNvbSIsImlhdCI6MTc5MDQwMDkzMiwiZXhwIjoxNzkwNDg3MzMyfQ.hsBPH7o8NZxQ4-Jhy1YOKx3NAUAQe9_SU4DLVgu7niCRmZ_LqffsrPDs7Amm1LX7SjIIX40PLSk6UOSL0tzuAw
 
 settings:
   encodeUrl: true
   timeout: 0
   followRedirects: true
   maxRedirects: 5
-  forwardAuthorizationHeader: false

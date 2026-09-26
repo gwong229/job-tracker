@@ -1,6 +1,7 @@
 package com.example.jobtracker.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,7 +12,6 @@ import com.example.jobtracker.dto.RegisterRequest;
 import com.example.jobtracker.dto.UserResponse;
 import com.example.jobtracker.service.UserService;
 import com.example.jobtracker.dto.LoginRequest;
-import com.example.jobtracker.dto.LoginResponse;
 
 import jakarta.validation.Valid;
 
@@ -31,7 +31,34 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        return ResponseEntity.ok(userService.login(request));
+    public ResponseEntity<UserResponse> login(@Valid @RequestBody LoginRequest request) {
+        UserService.AuthResult authResult = userService.login(request);
+
+        ResponseCookie cookie = ResponseCookie.from("jwt", authResult.token())
+                .httpOnly(true)
+                .secure(false)       // true once you're on HTTPS (e.g. in production)
+                .sameSite("Lax")
+                .path("/")
+                .maxAge(24 * 60 * 60) // 24h — matches your JWT expiry
+                .build();
+
+        return ResponseEntity.ok()
+                .header("Set-Cookie", cookie.toString())
+                .body(authResult.user());
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        ResponseCookie expiredCookie = ResponseCookie.from("jwt", "")
+                .httpOnly(true)
+                .secure(false)
+                .sameSite("Lax")
+                .path("/")
+                .maxAge(0) // tells the browser to delete the cookie immediately
+                .build();
+
+        return ResponseEntity.ok()
+                .header("Set-Cookie", expiredCookie.toString())
+                .build();
     }
 }

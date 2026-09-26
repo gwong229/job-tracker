@@ -4,7 +4,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.jobtracker.dto.LoginRequest;
-import com.example.jobtracker.dto.LoginResponse;
 import com.example.jobtracker.dto.RegisterRequest;
 import com.example.jobtracker.dto.UserResponse;
 import com.example.jobtracker.exception.EmailAlreadyExistsException;
@@ -21,8 +20,8 @@ public class UserService {
     private final JwtService jwtService;
 
     public UserService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder,
-                       JwtService jwtService) {
+                        PasswordEncoder passwordEncoder,
+                        JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
@@ -42,7 +41,7 @@ public class UserService {
         return new UserResponse(saved.getId(), saved.getUsername(), saved.getEmail());
     }
 
-    public LoginResponse login(LoginRequest request) {
+    public AuthResult login(LoginRequest request) {
         User user = userRepository.findByEmail(request.email())
                 .orElseThrow(InvalidCredentialsException::new);
 
@@ -51,7 +50,9 @@ public class UserService {
         }
 
         String token = jwtService.generateToken(user);
-        return new LoginResponse(token,
+        return new AuthResult(token,
                 new UserResponse(user.getId(), user.getUsername(), user.getEmail()));
     }
+
+    public record AuthResult(String token, UserResponse user) {}
 }
