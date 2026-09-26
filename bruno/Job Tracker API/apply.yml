@@ -6,16 +6,16 @@ info:
 http:
   method: POST
   url: http://localhost:8080/api/my-applications
+  headers:
+    - name: X-XSRF-TOKEN
+      value: 0f1530b2-b3f2-436e-996a-dc45dc04ce43
   body:
     type: json
-    data: '   { "applicationId": 1, "transitTime": "30 min", "applicationStatus": "Applied" }'
-  auth:
-    type: bearer
-    token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJnZW9mZnJleUBleGFtcGxlLmNvbSIsImlhdCI6MTc5MDAzMDM4OSwiZXhwIjoxNzkwMTE2Nzg5fQ.YIv9XW2A6NdgPitltQdJtgRqVdkIWuJ1523Cie7dlfxOAeVrCTCWsO8QCJ7K9a3n2ZoIf-YED49LryOcB1EBQQ
+    data: '{ "applicationId": 1, "transitTime": "30 min", "applicationStatus": "Applied" }'
+  auth: inherit
 
 settings:
   encodeUrl: true
   timeout: 0
   followRedirects: true
   maxRedirects: 5
-  forwardAuthorizationHeader: false
