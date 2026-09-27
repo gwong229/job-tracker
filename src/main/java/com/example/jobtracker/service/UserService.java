@@ -10,6 +10,7 @@ import com.example.jobtracker.exception.EmailAlreadyExistsException;
 import com.example.jobtracker.exception.InvalidCredentialsException;
 import com.example.jobtracker.model.User;
 import com.example.jobtracker.repository.UserRepository;
+import com.example.jobtracker.security.CurrentUserProvider;
 import com.example.jobtracker.security.JwtService;
 
 @Service
@@ -18,13 +19,16 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final CurrentUserProvider currentUserProvider;
 
     public UserService(UserRepository userRepository,
                         PasswordEncoder passwordEncoder,
-                        JwtService jwtService) {
+                        JwtService jwtService,
+                        CurrentUserProvider currentUserProvider) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.currentUserProvider = currentUserProvider;
     }
 
     public UserResponse register(RegisterRequest request) {
@@ -52,6 +56,13 @@ public class UserService {
         String token = jwtService.generateToken(user);
         return new AuthResult(token,
                 new UserResponse(user.getId(), user.getUsername(), user.getEmail()));
+    }
+
+    public UserResponse getCurrentUser() {
+        Long userId = currentUserProvider.getCurrentUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("Authenticated user not found in database"));
+        return new UserResponse(user.getId(), user.getUsername(), user.getEmail());
     }
 
     public record AuthResult(String token, UserResponse user) {}
