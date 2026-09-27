@@ -3,6 +3,7 @@ package com.example.jobtracker.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,10 +37,10 @@ public class AuthController {
 
         ResponseCookie cookie = ResponseCookie.from("jwt", authResult.token())
                 .httpOnly(true)
-                .secure(false)       // true once you're on HTTPS (e.g. in production)
+                .secure(false)
                 .sameSite("Lax")
                 .path("/")
-                .maxAge(24 * 60 * 60) // 24h — matches your JWT expiry
+                .maxAge(24 * 60 * 60)
                 .build();
 
         return ResponseEntity.ok()
@@ -54,11 +55,16 @@ public class AuthController {
                 .secure(false)
                 .sameSite("Lax")
                 .path("/")
-                .maxAge(0) // tells the browser to delete the cookie immediately
+                .maxAge(0)
                 .build();
 
         return ResponseEntity.ok()
                 .header("Set-Cookie", expiredCookie.toString())
                 .build();
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> me() {
+        return ResponseEntity.ok(userService.getCurrentUser());
     }
 }
