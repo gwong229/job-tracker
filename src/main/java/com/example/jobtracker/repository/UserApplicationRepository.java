@@ -15,4 +15,6 @@ public interface UserApplicationRepository extends JpaRepository<UserApplication
 
     boolean existsByUserIdAndApplicationId(Long userId, Long applicationId);
     boolean existsByApplicationId(Long applicationId);
+
+    List<UserApplication> findByApplicationId(Long applicationId);
 }
