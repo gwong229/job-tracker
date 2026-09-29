@@ -1,9 +1,11 @@
 package com.example.jobtracker.service;
 
+import com.example.jobtracker.dto.ApplicantResponse;
 import com.example.jobtracker.dto.CreateJobApplicationRequest;
 import com.example.jobtracker.dto.JobApplicationResponse;
 import com.example.jobtracker.dto.PatchJobApplicationRequest;
 import com.example.jobtracker.model.JobApplication;
+import com.example.jobtracker.model.UserApplication;
 import com.example.jobtracker.repository.JobApplicationRepository;
 import com.example.jobtracker.repository.UserApplicationRepository;
 import com.example.jobtracker.exception.ApplicationHasApplicantsException;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -103,6 +106,16 @@ public class JobApplicationService {
         return repository.findByCompanyContainingIgnoreCase(company, pageable).map(this::toResponse);
     }
 
+    public Optional<List<ApplicantResponse>> getApplicants(Long id) {
+        if (!repository.existsById(id)) {
+            return Optional.empty();
+        }
+        List<ApplicantResponse> applicants = userApplicationRepository.findByApplicationId(id).stream()
+                .map(this::toApplicantResponse)
+                .toList();
+        return Optional.of(applicants);
+    }
+
     private JobApplicationResponse toResponse(JobApplication application) {
         return new JobApplicationResponse(
                 application.getId(),
@@ -113,6 +126,16 @@ public class JobApplicationService {
                 application.getJobType(),
                 application.getApplicationDeadline(),
                 application.getPostingPlatform()
+        );
+    }
+
+    private ApplicantResponse toApplicantResponse(UserApplication userApplication) {
+        return new ApplicantResponse(
+                userApplication.getUser().getUsername(),
+                userApplication.getTransitTime(),
+                userApplication.getDateApplied(),
+                userApplication.getApplicationStatus(),
+                userApplication.getNotes()
         );
     }
 }

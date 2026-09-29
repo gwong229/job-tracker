@@ -1,5 +1,6 @@
 package com.example.jobtracker.controller;
 
+import com.example.jobtracker.dto.ApplicantResponse;
 import com.example.jobtracker.dto.CreateJobApplicationRequest;
 import com.example.jobtracker.dto.JobApplicationResponse;
 import com.example.jobtracker.dto.PatchJobApplicationRequest;
@@ -10,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import jakarta.validation.Valid;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/applications")
@@ -35,6 +38,13 @@ public class JobApplicationController {
     @GetMapping("/{id}")
     public ResponseEntity<JobApplicationResponse> getApplicationById(@PathVariable Long id) {
         return service.getApplicationById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{id}/applicants")
+    public ResponseEntity<List<ApplicantResponse>> getApplicants(@PathVariable Long id) {
+        return service.getApplicants(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
