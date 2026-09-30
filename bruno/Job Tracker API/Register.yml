@@ -8,7 +8,7 @@ http:
   url: http://localhost:8080/api/auth/register
   body:
     type: json
-    data: '{ "username": "geoffrey", "email": "geoffrey@example.com", "password": "password123" }'
+    data: '{ "username": "dean", "email": "dean@deanmail.com", "password": "password123" }'
   auth: inherit
 
 settings:
