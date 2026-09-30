@@ -2,6 +2,7 @@ package com.example.jobtracker.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import jakarta.persistence.Column;
 
 @Entity
 @Table(
@@ -28,6 +29,7 @@ public class UserApplication {
 
     private String applicationStatus;
 
+    @Column(columnDefinition = "TEXT")
     private String notes;
 
     public UserApplication() {
